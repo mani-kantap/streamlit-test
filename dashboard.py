@@ -58,17 +58,21 @@ uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
 if uploaded_file is not None:
     # Read the CSV file into a DataFrame
     df = pd.read_csv(uploaded_file)
-    st.subheader("Raw Sleep Data")
-    st.write(df)
+    # st.subheader("Raw Sleep Data")
     temp = df[(df['timestamp'] > '2017-11-09') & (df['timestamp'] < '2017-11-11')]
+    # st.write(temp)
+
+
+    
+    test_df = make_features(temp)
+
     # Create a plot using Plotly Express
-    fig = px.line(temp, x='timestamp', y='awake', title='Sleep Tracking Plot Actual')
+    fig = px.line(test_df, x='timestamp', y='awake', title='Sleep Tracking Plot Actual')
     
     # Display the plot
     st.plotly_chart(fig)
+    st.write("awake 0 = sleeping")
 
-    
-    test_df = make_features(df)
     X_test = test_df[features]
     y_test = test_df['awake']
 
@@ -80,13 +84,12 @@ if uploaded_file is not None:
     predicted_y_test = loaded_model.predict(X_test)
     test_df['awake'] = predicted_y_test
 
-
     # Convert the 'Time' column to datetime format
     # df['Time'] = pd.to_datetime(df['Time'])
 
 
 
-    test_df = test_df[(test_df['timestamp'] > '2017-11-09') & (test_df['timestamp'] < '2017-11-11')]
+    # test_df = test_df[(test_df['timestamp'] > '2017-11-09') & (test_df['timestamp'] < '2017-11-11')]
 
 
     fig2 = px.line(test_df, x='timestamp', y='awake', title='Sleep Tracking Plot Predicted')
@@ -94,4 +97,6 @@ if uploaded_file is not None:
     # Display the plot
     # st.subheader("Sleep Tracking Plot")
     st.plotly_chart(fig2)
+    st.write("awake 0 = sleeping")
+
 
